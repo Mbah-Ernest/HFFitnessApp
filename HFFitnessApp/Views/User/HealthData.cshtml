@@ -1,0 +1,148 @@
+﻿@{
+    ViewData["Title"] = "Health Data Input";
+}
+
+<div class="health-data-input-container">
+    <h3 class="text-center">Health Data Input</h3>
+
+    <form asp-action="SaveHealthData" method="post">
+        <div class="form-group">
+            <label>Age</label>
+            <input type="number" name="Age" class="form-control" min="1" max="120" required />
+        </div>
+
+        <div class="form-group">
+            <label>Height (cm)</label>
+            <input type="number" name="Height" class="form-control" min="100" max="250" required />
+        </div>
+
+        <div class="form-group">
+            <label>Weight (kg)</label>
+            <input type="number" name="Weight" class="form-control" min="30" max="300" required />
+        </div>
+
+        <div class="form-group">
+            <label>Gender</label><br />
+            <input type="radio" name="Gender" value="Male" required /> Male
+            <input type="radio" name="Gender" value="Female" required /> Female
+        </div>
+
+        <div class="form-group">
+            <label>Fitness Goal</label>
+            <select name="FitnessGoal" class="form-control" required>
+                <option value="">-- Select Goal --</option>
+                <option value="Weight Loss">Weight Loss</option>
+                <option value="Muscle Gain">Muscle Gain</option>
+                <option value="Maintenance">Maintenance</option>
+                <option value="Improved Endurance">Improved Endurance</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Dietary Preferences</label>
+            <select name="DietaryPreferences" class="form-control" required>
+                <option value="">-- Select Dietary Preference --</option>
+                <option value="Vegetarian">Vegetarian</option>
+                <option value="Vegan">Vegan</option>
+                <option value="Keto">Keto</option>
+                <option value="Paleo">Paleo</option>
+                <option value="None">None</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Food Preferences</label>
+            <select name="FoodPreferences" class="form-control" required>
+                <option value="">-- Select Food Preference --</option>
+                <option value="Nigerian Delicacies">Nigerian Delicacies</option>
+                <option value="South American Cuisine">South American Cuisine</option>
+                <option value="Mexican Cuisine">Mexican Cuisine</option>
+                <option value="Italian Cuisine">Italian Cuisine</option>
+                <option value="Chinese Cuisine">Chinese Cuisine</option>
+                <option value="Indian Cuisine">Indian Cuisine</option>
+                <option value="Japanese Cuisine">Japanese Cuisine</option>
+                <option value="Mediterranean Cuisine">Mediterranean Cuisine</option>
+                <option value="Middle Eastern Cuisine">Middle Eastern Cuisine</option>
+                <option value="African Cuisine">African Cuisine</option>
+                <option value="American Cuisine">American Cuisine</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Health Conditions</label><br />
+            <input type="radio" name="HealthConditions" value="Diabetes" /> Diabetes
+            <input type="radio" name="HealthConditions" value="Hypertension" /> Hypertension
+            <input type="radio" name="HealthConditions" value="None" /> None
+        </div>
+
+        <div class="form-group">
+            <label>Activity Level</label><br />
+            <input type="radio" name="ActivityLevel" value="Sedentary" required /> Sedentary
+            <input type="radio" name="ActivityLevel" value="Lightly Active" required /> Lightly Active
+            <input type="radio" name="ActivityLevel" value="Moderately Active" required /> Moderately Active
+            <input type="radio" name="ActivityLevel" value="Very Active" required /> Very Active
+        </div>
+
+        <div class="form-group">
+            <label>Occupation</label>
+            <select name="Occupation" class="form-control" required>
+                <option value="">-- Select Occupation --</option>
+                <option value="Sedentary Job">Sedentary Job</option>
+                <option value="Physically Demanding Job">Physically Demanding Job</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Allergies (optional)</label>
+            <input type="text" name="Allergies" class="form-control" />
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .health-data-input-container, .signup-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        font-size: 1em;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .btn {
+        width: 100%;
+        font-size: 1.1em;
+        padding: 10px;
+    }
+
+    .btn-primary {
+        background-color: #007BFF;
+        color: #ffffff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+</style>

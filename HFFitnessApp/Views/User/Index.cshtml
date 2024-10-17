@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Sign Up";
+
+    /*
+     * for navigation to sign in page
+     *
+     * <a href="@Url.Action("SignIn", "User")" class="btn btn-secondary">Sign In</a>
+
+    */
+}
+
+<div class="signup-container">
+    <h3 class="text-center">Sign Up</h3>
+
+    <form asp-action="HealthData" method="post">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Next</button>
+    </form>
+</div>
+
+<style>
+    .signup-container {
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        font-size: 1em;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .btn {
+        font-size: 1.1em;
+        padding: 10px;
+        font-weight: bold;
+        width: 100%;
+    }
+
+    .btn-primary {
+        background-color: #007BFF;
+        color: #ffffff;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>

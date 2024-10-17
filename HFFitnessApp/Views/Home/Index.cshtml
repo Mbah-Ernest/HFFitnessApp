@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "Fitness Plan Generator";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded-lg">
+        <h2 class="text-center mb-4 text-primary">Generate Your Workout Plan</h2>
+
+        <form method="post" asp-controller="Fitness" asp-action="GenerateWorkout">
+            <div class="form-group">
+                <label for="fitnessGoal" class="font-weight-bold">Enter your fitness goal:</label>
+                <input type="text" id="fitnessGoal" name="fitnessGoal" class="form-control" placeholder="e.g., Build muscle, lose weight" required />
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">Generate Workout</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .container {
+        max-width: 600px;
+    }
+
+    .card {
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 30px;
+    }
+
+    h2 {
+        color: #333;
+        font-size: 1.8em;
+    }
+
+    .form-group label {
+        font-size: 1.1em;
+        color: #333;
+    }
+
+    .form-control {
+        font-size: 1em;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .btn {
+        width: 100%;
+        font-size: 1.1em;
+        font-weight: bold;
+        padding: 10px;
+    }
+
+    .btn-primary {
+        background-color: #007BFF;
+        color: #ffffff;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>

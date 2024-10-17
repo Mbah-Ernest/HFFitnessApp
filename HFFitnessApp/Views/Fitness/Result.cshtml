@@ -1,0 +1,109 @@
+﻿@{
+    ViewData["Title"] = "Your Suggested Meal Plan";
+    var suggestedMealPlan = ViewBag.GeneratedWorkout ?? "No plan available. Request one below."; // Adjust variable name as needed
+    var errorMessage = ViewBag.ErrorMessage as string;
+}
+
+<div class="meal-plan-container">
+    <h3 class="text-center">Your Suggested Meal Plan</h3>
+
+    @if (!string.IsNullOrEmpty(suggestedMealPlan))
+    {
+        <div>@suggestedMealPlan</div>
+    }
+    else
+    {
+        <p>No plan available. Request one below.</p>
+    }
+
+    <div class="options">
+        <form method="post" action="@Url.Action("GenerateWorkout", "Fitness")">
+            <button type="submit" class="btn btn-primary">New Plan</button>
+        </form>
+    </div>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger">
+            <p>Error: @errorMessage</p>
+        </div>
+    }
+</div>
+
+<style>
+    .meal-plan-container {
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 30px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .food-preference {
+        margin-bottom: 25px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .meal-section {
+        margin-bottom: 30px;
+        padding: 15px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        background-color: #f7f7f7;
+        transition: background-color 0.3s ease;
+    }
+
+    .meal-section:hover {
+        background-color: #eaeaea;
+    }
+
+    .meal-title {
+        color: #007BFF;
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .meal-details p {
+        margin: 5px 0;
+        color: #666;
+    }
+
+    .options {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    .btn {
+        flex: 1;
+        margin: 0 5px;
+        padding: 10px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #007BFF;
+        color: #ffffff;
+        border: none;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: #ffffff;
+        border: none;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+    }
+</style>

@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Sign In";
+}
+
+<div class="signin-container">
+    <h3 class="text-center">Sign In</h3>
+
+    <form asp-action="SignIn" method="post">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+
+        <div class="separator">
+            <span>OR</span>
+        </div>
+
+        <div class="social-login">
+            <button type="button" class="btn btn-outline-secondary btn-google">
+                <i class="fab fa-google"></i> Sign in with Google
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .signin-container {
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        font-size: 1em;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .btn {
+        font-size: 1.1em;
+        padding: 10px;
+        font-weight: bold;
+        width: 100%;
+    }
+
+    .btn-primary {
+        background-color: #007BFF;
+        color: #ffffff;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .separator {
+        text-align: center;
+        margin: 20px 0;
+        font-size: 14px;
+        color: #aaa;
+        position: relative;
+    }
+
+    .separator::before,
+    .separator::after {
+        content: '';
+        width: 45%;
+        height: 1px;
+        background: #ddd;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .separator::before {
+        left: 0;
+    }
+
+    .separator::after {
+        right: 0;
+    }
+
+    .social-login {
+        text-align: center;
+    }
+
+    .btn-google {
+        color: #4285F4;
+        border-color: #4285F4;
+        background-color: #ffffff;
+        font-weight: bold;
+    }
+
+    .btn-google:hover {
+        background-color: #4285F4;
+        color: #ffffff;
+    }
+
+    .btn-google .fab {
+        margin-right: 8px;
+    }
+</style>
+
+<!-- Font Awesome for Google Icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-Bx8R+2C7Tp5/9pryF+1OnHlJ20KlGV1dmUal6g6OQ/MHV7iw31I4FDw9NxPY+/6d" crossorigin="anonymous">
