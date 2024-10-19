@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace HFFitnessApp.Models // Adjust the namespace as necessary
+namespace HFFitnessApp.Models
 {
     public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
@@ -11,7 +11,7 @@ namespace HFFitnessApp.Models // Adjust the namespace as necessary
         {
         }
 
+        public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<HealthData> HealthData { get; set; }
-       
     }
 }

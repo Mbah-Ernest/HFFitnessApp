@@ -1,19 +1,26 @@
-﻿@{
+﻿@model HFFitnessApp.Models.SignInModel
+
+@{
     ViewData["Title"] = "Sign In";
 }
 
 <div class="signin-container">
     <h3 class="text-center">Sign In</h3>
 
-    <form asp-action="SignIn" method="post">
+    <!-- Display Validation Summary for error messages -->
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <form asp-action="SignIn" method="post" novalidate>
         <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" class="form-control" required />
+            <label asp-for="Username">Username:</label>
+            <input asp-for="Username" class="form-control" />
+            <span asp-validation-for="Username" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" class="form-control" required />
+            <label asp-for="Password">Password:</label>
+            <input asp-for="Password" class="form-control" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
 
         <button type="submit" class="btn btn-primary btn-block">Sign In</button>
@@ -26,6 +33,13 @@
             <button type="button" class="btn btn-outline-secondary btn-google">
                 <i class="fab fa-google"></i> Sign in with Google
             </button>
+        </div>
+        
+        <br />
+        <div class="social-login">
+            <a href="/user/index" class="btn btn-outline-secondary btn-google">
+                <i class="fab fa-user-plus"></i> Sign Up
+            </a>
         </div>
     </form>
 </div>
@@ -119,7 +133,14 @@
     .btn-google .fab {
         margin-right: 8px;
     }
+
+    
 </style>
 
 <!-- Font Awesome for Google Icon -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-Bx8R+2C7Tp5/9pryF+1OnHlJ20KlGV1dmUal6g6OQ/MHV7iw31I4FDw9NxPY+/6d" crossorigin="anonymous">
+
+<!-- Client-Side Validation Scripts -->
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HFFitnessApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using HFFitnessApp.Models; // Adjust this namespace as needed to match your project
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using HFFitnessApp.Models;
 
 namespace HFFitnessApp.Controllers
 {
@@ -19,70 +19,164 @@ namespace HFFitnessApp.Controllers
             _context = context;
         }
 
-        // Action method for the Sign-Up page
+        // This is the Sign-Up page (Register page)
         public IActionResult Index()
         {
-            return View();
+            return View(); // Views/User/Index.cshtml (Sign-Up page)
         }
 
-        // Register method for handling user sign-up
+        // POST method to handle registration
         [HttpPost]
         public async Task<IActionResult> Register(UserProfile model)
         {
             if (ModelState.IsValid)
             {
+                // Create Identity user
                 var user = new IdentityUser { UserName = model.Username, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
+                    // Save user profile in the custom UserProfiles table
+                    model.Password = ""; // Do not store the plain password
+                    _context.UserProfiles.Add(model);
+                    await _context.SaveChangesAsync();
+
+                    // Automatically sign in the user
                     await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    // Redirect to the Health Data page
                     return RedirectToAction("HealthData");
                 }
+
+                // Display any errors that occurred during sign-up
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }
             }
-            return View("Index", model); // Return to Sign-Up page if registration fails
+
+            return View("Index", model); // Return to sign-up page if registration fails
         }
 
-        // Action method for displaying the Health Data Input page
-        public IActionResult HealthData()
-        {
-            return View();
-        }
-
-        // Action method for saving health data
-        [HttpPost]
-        public async Task<IActionResult> SaveHealthData(HealthData model)
-        {
-            if (ModelState.IsValid)
-            {
-                model.UserId = _userManager.GetUserId(User); // Associate health data with the current user
-                _context.HealthData.Add(model);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Dashboard"); // Redirect to a dashboard or confirmation page
-            }
-            return View("HealthData", model); // Return to Health Data page if validation fails
-        }
-
-        // Action method for the Sign-In page
+        // Sign-in page
+        [AllowAnonymous]
         public IActionResult SignIn()
         {
-            return View();
+            return View(); // Views/User/SignIn.cshtml
         }
 
-        // SignIn method for handling user login
+        [Authorize]
+        public IActionResult Dashboard()
+        {
+            // Get the current logged-in user's ID
+            var userId = _userManager.GetUserId(User);
+
+            // Fetch the health data associated with the user
+            var healthData = _context.HealthData.FirstOrDefault(h => h.UserId == userId);
+
+            // If health data is not found, redirect to the HealthData form
+            if (healthData == null)
+            {
+                return RedirectToAction("HealthData");
+            }
+
+            // Pass the health data to the Dashboard view
+            return View(healthData);
+        }
+
+
+        // POST method for sign-in
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> SignIn(string username, string password)
         {
             var result = await _signInManager.PasswordSignInAsync(username, password, isPersistent: false, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                return RedirectToAction("Dashboard"); // Redirect to a dashboard or main page after successful sign-in
+                // Get the current user's ID
+                var userId = _userManager.GetUserId(User);
+
+                // Check if health data exists for the user
+                var healthDataExists = _context.HealthData.Any(h => h.UserId == userId);
+
+                if (healthDataExists)
+                {
+                    // If health data exists, redirect to the Dashboard
+                    return RedirectToAction("Dashboard");
+                }
+                else
+                {
+                    // If no health data, redirect to Health Data input page
+                    return RedirectToAction("HealthData");
+                }
             }
-            ModelState.AddModelError("", "Invalid login attempt.");
+
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return View();
+        }
+
+
+        // Health Data page (after sign-in)
+        [Authorize]
+        public IActionResult HealthData()
+        {
+            return View(); // Views/User/HealthData.cshtml
+        }
+
+        // POST method to save health data
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> SaveHealthData(HealthData model)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("SignIn", "User");
+            }
+
+
+            // Get the current logged-in user's ID
+            var userId = _userManager.GetUserId(User);
+
+            // Check if the user is logged in
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("SignIn", "User");
+            }
+
+            // Assign the UserId to the health data model
+            model.UserId = userId;
+
+            // Remove ModelState error for UserId since we set it manually
+            ModelState.Remove("UserId");
+
+            // Validate the model state
+            if (ModelState.IsValid)
+            { 
+                // Save the health data to the database
+                _context.HealthData.Add(model);
+                await _context.SaveChangesAsync();
+
+                // Redirect to the dashboard after saving
+                return RedirectToAction("Dashboard");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                foreach (var state in ModelState)
+                {
+                    if (state.Value.Errors.Any())
+                    {
+                        foreach (var error in state.Value.Errors)
+                        {
+                            Console.WriteLine($"Error in {state.Key}: {error.ErrorMessage}");
+                        }
+                    }
+                }
+            }
+
+            // If the model state is invalid, return the form with errors
+            return View("HealthData", model);
         }
     }
 }

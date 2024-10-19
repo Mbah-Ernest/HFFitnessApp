@@ -1,0 +1,107 @@
+﻿@model HFFitnessApp.Models.HealthData
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Welcome to Your Dashboard</h2>
+
+@if (Model != null)
+{
+    <h4>Your Health Data</h4>
+    <table class="table table-striped">
+        <tr>
+            <th>Age</th>
+            <td>@Model.Age</td>
+        </tr>
+        <tr>
+            <th>Height (cm)</th>
+            <td>@Model.Height</td>
+        </tr>
+        <tr>
+            <th>Weight (kg)</th>
+            <td>@Model.Weight</td>
+        </tr>
+        <tr>
+            <th>Gender</th>
+            <td>@Model.Gender</td>
+        </tr>
+        <tr>
+            <th>Fitness Goal</th>
+            <td>@Model.FitnessGoal</td>
+        </tr>
+        <tr>
+            <th>Dietary Preferences</th>
+            <td>@Model.DietaryPreferences</td>
+        </tr>
+        <tr>
+            <th>Activity Level</th>
+            <td>@Model.ActivityLevel</td>
+        </tr>
+        <tr>
+            <th>Occupation</th>
+            <td>@Model.Occupation</td>
+        </tr>
+        <!-- Add more rows as needed for other HealthData fields -->
+    </table>
+
+    <div>
+        <div class="mt-3">
+            <a href="@Url.Action("HealthData", "User")" class="btn btn-primary">Update Health Data</a>
+        </div>
+
+        <div class="mt-3 sef">
+            <a href="/home/index" class="btn btn-primary">Generate Workout Plan</a>
+        </div>
+
+    </div>
+    
+}
+else
+{
+    <p>No health data found. Please <a href="@Url.Action("HealthData", "User")">add your health data</a> to get started.</p>
+}
+
+
+<style>
+    h2 {
+        color: #007BFF;
+        margin-top: 20px;
+    }
+
+    table {
+        margin-top: 20px;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        text-align: left;
+        color: #555;
+    }
+
+    td {
+        text-align: right;
+        color: #333;
+    }
+
+    .btn-primary {
+        background-color: #007BFF;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .sef{
+        text-align: right;
+    }
+</style>

@@ -1,4 +1,6 @@
-﻿@{
+﻿@model HFFitnessApp.Models.HealthData
+
+@{
     ViewData["Title"] = "Health Data Input";
 }
 
@@ -8,39 +10,44 @@
     <form asp-action="SaveHealthData" method="post">
         <div class="form-group">
             <label>Age</label>
-            <input type="number" name="Age" class="form-control" min="1" max="120" required />
+            <input asp-for="Age" class="form-control" min="1" max="120" required />
+            <span asp-validation-for="Age" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label>Height (cm)</label>
-            <input type="number" name="Height" class="form-control" min="100" max="250" required />
+            <input asp-for="Height" class="form-control" min="100" max="250" required />
+            <span asp-validation-for="Height" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label>Weight (kg)</label>
-            <input type="number" name="Weight" class="form-control" min="30" max="300" required />
+            <input asp-for="Weight" class="form-control" min="30" max="300" required />
+            <span asp-validation-for="Weight" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label>Gender</label><br />
-            <input type="radio" name="Gender" value="Male" required /> Male
-            <input type="radio" name="Gender" value="Female" required /> Female
+            <input asp-for="Gender" type="radio" value="Male" required /> Male
+            <input asp-for="Gender" type="radio" value="Female" required /> Female
+            <span asp-validation-for="Gender" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label>Fitness Goal</label>
-            <select name="FitnessGoal" class="form-control" required>
+            <select asp-for="FitnessGoal" class="form-control" required>
                 <option value="">-- Select Goal --</option>
                 <option value="Weight Loss">Weight Loss</option>
                 <option value="Muscle Gain">Muscle Gain</option>
                 <option value="Maintenance">Maintenance</option>
                 <option value="Improved Endurance">Improved Endurance</option>
             </select>
+            <span asp-validation-for="FitnessGoal" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label>Dietary Preferences</label>
-            <select name="DietaryPreferences" class="form-control" required>
+            <select asp-for="DietaryPreferences" class="form-control" required>
                 <option value="">-- Select Dietary Preference --</option>
                 <option value="Vegetarian">Vegetarian</option>
                 <option value="Vegan">Vegan</option>
@@ -48,63 +55,78 @@
                 <option value="Paleo">Paleo</option>
                 <option value="None">None</option>
             </select>
+            <span asp-validation-for="DietaryPreferences" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label>Food Preferences</label>
-            <select name="FoodPreferences" class="form-control" required>
+            <select asp-for="FoodPreferences" class="form-control">
                 <option value="">-- Select Food Preference --</option>
-                <option value="Nigerian Delicacies">Nigerian Delicacies</option>
-                <option value="South American Cuisine">South American Cuisine</option>
-                <option value="Mexican Cuisine">Mexican Cuisine</option>
-                <option value="Italian Cuisine">Italian Cuisine</option>
                 <option value="Chinese Cuisine">Chinese Cuisine</option>
-                <option value="Indian Cuisine">Indian Cuisine</option>
-                <option value="Japanese Cuisine">Japanese Cuisine</option>
-                <option value="Mediterranean Cuisine">Mediterranean Cuisine</option>
-                <option value="Middle Eastern Cuisine">Middle Eastern Cuisine</option>
-                <option value="African Cuisine">African Cuisine</option>
-                <option value="American Cuisine">American Cuisine</option>
+                <option value="Nigerian Delicacies">Nigerian Delicacies</option>
             </select>
+            <span asp-validation-for="FoodPreferences" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label>Health Conditions</label><br />
-            <input type="radio" name="HealthConditions" value="Diabetes" /> Diabetes
-            <input type="radio" name="HealthConditions" value="Hypertension" /> Hypertension
-            <input type="radio" name="HealthConditions" value="None" /> None
+            <input asp-for="HealthConditions" type="radio" value="Diabetes" /> Diabetes
+            <input asp-for="HealthConditions" type="radio" value="Hypertension" /> Hypertension
+            <input asp-for="HealthConditions" type="radio" value="None" /> None
+            <span asp-validation-for="HealthConditions" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label>Activity Level</label><br />
-            <input type="radio" name="ActivityLevel" value="Sedentary" required /> Sedentary
-            <input type="radio" name="ActivityLevel" value="Lightly Active" required /> Lightly Active
-            <input type="radio" name="ActivityLevel" value="Moderately Active" required /> Moderately Active
-            <input type="radio" name="ActivityLevel" value="Very Active" required /> Very Active
+            <input asp-for="ActivityLevel" type="radio" value="Sedentary" required /> Sedentary
+            <input asp-for="ActivityLevel" type="radio" value="Lightly Active" required /> Lightly Active
+            <input asp-for="ActivityLevel" type="radio" value="Moderately Active" required /> Moderately Active
+            <input asp-for="ActivityLevel" type="radio" value="Very Active" required /> Very Active
+            <span asp-validation-for="ActivityLevel" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label>Occupation</label>
-            <select name="Occupation" class="form-control" required>
+            <select asp-for="Occupation" class="form-control" required>
                 <option value="">-- Select Occupation --</option>
                 <option value="Sedentary Job">Sedentary Job</option>
                 <option value="Physically Demanding Job">Physically Demanding Job</option>
             </select>
+            <span asp-validation-for="Occupation" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Sleep Patterns</label>
+            <select asp-for="SleepPatterns" class="form-control" required>
+                <option value="">-- Select Sleep Pattern --</option>
+                <option value="Less than 5 hours">Less than 5 hours</option>
+                <option value="5-6 hours">5-6 hours</option>
+                <option value="6-7 hours">6-7 hours</option>
+                <option value="7-8 hours">7-8 hours</option>
+                <option value="More than 8 hours">More than 8 hours</option>
+                <option value="Irregular Sleep Pattern">Irregular Sleep Pattern</option>
+            </select>
+            <span asp-validation-for="SleepPatterns" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Injury / Operation History (optional)</label>
+            <input asp-for="InjuryHistory" class="form-control" />
+            <span asp-validation-for="InjuryHistory" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label>Allergies (optional)</label>
-            <input type="text" name="Allergies" class="form-control" />
+            <input asp-for="Allergies" class="form-control" />
+            <span asp-validation-for="Allergies" class="text-danger"></span>
         </div>
 
-        <div>
-            <button type="submit" class="btn btn-primary btn-block">Submit</button>
-        </div>
+        <button type="submit" class="btn btn-primary btn-block">Submit</button>
     </form>
 </div>
 
 <style>
-    .health-data-input-container, .signup-container {
+    .health-data-input-container {
         max-width: 600px;
         margin: 40px auto;
         padding: 20px;

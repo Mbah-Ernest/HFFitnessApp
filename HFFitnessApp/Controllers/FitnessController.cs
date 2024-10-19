@@ -13,47 +13,78 @@ namespace FitnessApp.Controllers
             return View();
         }
 
-        // Action method to handle user input and call Hugging Face API
+        // Action method to handle user input and call Gemini API
         [HttpPost]
         public async Task<IActionResult> GenerateWorkout(string fitnessGoal)
         {
-            // Replace with your Hugging Face API Key
-            string apiKey = "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";
+            // Replace this with your actual Gemini AI API Key
+            string apiKey = "AIzaSyCuzgLXTIh-Y7-FaaBnWNSGD_SXhMQRkFQ";
 
-            // Model and API setup
-            string model = "facebook/blenderbot-400M-distill";
-            string apiUrl = $"https://api-inference.huggingface.co/models/{model}";
+            // Gemini API endpoint
+            string apiUrl = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={apiKey}";
 
-            //// Prepare the client and request
-            //var client = new RestClient(apiUrl);
-            //var request = new RestRequest();
-            //request.Method = Method.Post;
-            //request.AddHeader("Authorization", $"Bearer {apiKey}");
-            //request.AddHeader("Content-Type", "application/json");
+            // Create a new RestSharp client
+            var client = new RestClient(apiUrl);
+            var request = new RestRequest();
+            request.Method = Method.Post;
+            request.AddHeader("Content-Type", "application/json");
 
-            //// Use fitnessGoal as part of the prompt
-            //var prompt = new { inputs = $"Create a workout plan for someone with the goal: {fitnessGoal}" };
-            //request.AddJsonBody(prompt);
+            // Use fitnessGoal as part of the request body
+            var body = new
+            {
+                contents = new[]
+                {
+                    new
+                    {
+                        parts = new[]
+                        {
+                            new { text = $"Create a workout plan for someone with the goal: {fitnessGoal}" }
+                        }
+                    }
+                }
+            };
+            request.AddJsonBody(body);
 
-            //// Send the request
-            //var response = await client.ExecuteAsync(request);
-            //string generatedWorkout = "";
+            try
+            {
+                // Send the request and get the response
+                var response = await client.ExecuteAsync(request);
 
-            //if (response.IsSuccessful)
-            //{
-            //    var jsonResponse = JArray.Parse(response.Content);
-            //    generatedWorkout = jsonResponse[0]["generated_text"].ToString();
-            //}
-            //else
-            //{
-            //    generatedWorkout = "Error generating workout plan.";
-            //}
+                string generatedWorkout = "";
 
-            string generatedWorkout = "Sample workout plan for UI development: \n1. Warm-up for 10 minutes \n2. 3 sets of push-ups \n3. 3 sets of squats \n4. Cool down for 5 minutes";
+                if (response.IsSuccessful)
+                {
+                    // Parse the response content
+                    var jsonResponse = JObject.Parse(response.Content);
 
-            // Pass the response to the view
-            ViewBag.GeneratedWorkout = generatedWorkout;
-            return View("Result");
+                    // Extract the text content from the response
+                    var textContent = jsonResponse["candidates"]?[0]?["content"]?["parts"]?[0]?["text"]?.ToString();
+
+                    if (!string.IsNullOrEmpty(textContent))
+                    {
+                        // Assign the generated workout to the view
+                        generatedWorkout = textContent;
+                    }
+                    else
+                    {
+                        generatedWorkout = "No workout plan found in the response.";
+                    }
+                }
+                else
+                {
+                    generatedWorkout = $"Error: {response.StatusCode} - {response.Content}";
+                }
+
+                // Pass the generated workout to the view
+                ViewBag.GeneratedWorkout = generatedWorkout;
+                return View("Result");
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions and show error message
+                ViewBag.GeneratedWorkout = $"Exception: {ex.Message}";
+                return View("Result");
+            }
         }
     }
 }

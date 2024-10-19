@@ -2,6 +2,14 @@
     ViewData["Title"] = "Fitness Plan Generator";
 }
 
+<h2 class="text-center mb-4 text-hf">Welcome to the Home Page</h2>
+<p class="text-center mb-4 text-hf">This is the homepage of the app.</p>
+<div class="social-login">
+    <a href="@Url.Action("SignIn", "User")" class="btn btn-outline-secondary btn-google">
+        <i class="fab fa-user-plus"></i> Sign In
+    </a>
+</div>
+
 <div class="container mt-5">
     <div class="card shadow-lg p-4 rounded-lg">
         <h2 class="text-center mb-4 text-primary">Generate Your Workout Plan</h2>
@@ -24,6 +32,11 @@
         max-width: 600px;
     }
 
+    .text-hf {
+        --bs-text-opacity: 1;
+        color: #41464b !important;
+    }
+    
     .card {
         background-color: #ffffff;
         border: 1px solid #ddd;
@@ -32,7 +45,7 @@
     }
 
     h2 {
-        color: #333;
+        
         font-size: 1.8em;
     }
 
