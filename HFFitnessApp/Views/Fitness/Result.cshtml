@@ -1,24 +1,32 @@
 ﻿@{
-    ViewData["Title"] = "Your Suggested Meal Plan";
-    var suggestedMealPlan = ViewBag.GeneratedWorkout ?? "No plan available. Request one below."; // Adjust variable name as needed
+    ViewData["Title"] = "Your Suggested Plan";
+    var workoutPlan = ViewBag.WorkoutPlan ?? "No workout plan available.";
+    var mealPlan = ViewBag.MealPlan ?? "No meal plan available.";
+    var notes = ViewBag.Notes ?? "No notes available.";
     var errorMessage = ViewBag.ErrorMessage as string;
 }
 
-<div class="meal-plan-container">
-    <h3 class="text-center">Your Suggested Meal Plan</h3>
+<div class="plan-container">
+    <h3 class="text-center">Your Suggested Workout and Meal Plan</h3>
 
-    @if (!string.IsNullOrEmpty(suggestedMealPlan))
-    {
-        <div>@suggestedMealPlan</div>
-    }
-    else
-    {
-        <p>No plan available. Request one below.</p>
-    }
+    <div class="plan-section">
+        <h4>Workout Plan</h4>
+        <pre>@workoutPlan</pre>
+    </div>
+
+    <div class="plan-section">
+        <h4>Meal Plan</h4>
+        <pre>@mealPlan</pre>
+    </div>
+
+    <div class="plan-section">
+        <h4>Notes</h4>
+        <pre>@notes</pre>
+    </div>
 
     <div class="options">
         <form method="post" action="@Url.Action("GenerateWorkout", "Fitness")">
-            <button type="submit" class="btn btn-primary">New Plan</button>
+            <button type="submit" class="btn btn-primary">Generate New Plan</button>
         </form>
     </div>
 
@@ -31,7 +39,7 @@
 </div>
 
 <style>
-    .meal-plan-container {
+    .plan-container {
         max-width: 700px;
         margin: 40px auto;
         padding: 30px;
@@ -46,14 +54,7 @@
         margin-bottom: 20px;
     }
 
-    .food-preference {
-        margin-bottom: 25px;
-        font-size: 18px;
-        font-weight: bold;
-        color: #555;
-    }
-
-    .meal-section {
+    .plan-section {
         margin-bottom: 30px;
         padding: 15px;
         border: 1px solid #eee;
@@ -62,18 +63,20 @@
         transition: background-color 0.3s ease;
     }
 
-    .meal-section:hover {
-        background-color: #eaeaea;
-    }
+        .plan-section:hover {
+            background-color: #eaeaea;
+        }
 
-    .meal-title {
+    h4 {
         color: #007BFF;
         font-size: 20px;
         margin-bottom: 10px;
     }
 
-    .meal-details p {
-        margin: 5px 0;
+    pre {
+        white-space: pre-wrap;
+        font-family: inherit;
+        font-size: 16px;
         color: #666;
     }
 

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using RestSharp;
 using Newtonsoft.Json.Linq;
 using HFFitnessApp.Models;
+using System.Text.RegularExpressions;
 
 namespace FitnessApp.Controllers
 {
@@ -49,7 +50,7 @@ namespace FitnessApp.Controllers
             // Create a new RestSharp client
             var client = new RestClient(apiUrl);
             var request = new RestRequest();
-            request.Method = Method.Post;  // Correct usage of Method.Post
+            request.Method = Method.Post;
             request.AddHeader("Content-Type", "application/json");
 
             // Use fitnessGoal as part of the request body
@@ -63,35 +64,89 @@ namespace FitnessApp.Controllers
                         {
                             new
                             {
-                                text = $@"Create a detailed **workout plan** and **meal plan** for a user with the following details:
-                                - Age: {healthData.Age}
-                                - Height: {healthData.Height} cm
-                                - Weight: {healthData.Weight} kg
-                                - Gender: {healthData.Gender}
-                                - Fitness Goal: {fitnessGoal}
-                                - Dietary Preferences: {healthData.DietaryPreferences}
-                                - Food Preferences: {healthData.FoodPreferences}
-                                - Health Conditions: {healthData.HealthConditions}
-                                - Allergies: {healthData.Allergies}
-                                - Activity Level: {healthData.ActivityLevel}
-                                - Occupation: {healthData.Occupation}
-                                - Sleep Patterns: {healthData.SleepPatterns}
-                                - Injury History: {healthData.InjuryHistory}
+                                        text = $@"Create a detailed **workout plan** and **meal plan** for a user with the following details:
+                                        - Age: {healthData.Age}
+                                        - Height: {healthData.Height} cm
+                                        - Weight: {healthData.Weight} kg
+                                        - Gender: {healthData.Gender}
+                                        - Fitness Goal: {fitnessGoal}
+                                        - Dietary Preferences: {healthData.DietaryPreferences}
+                                        - Food Preferences: {healthData.FoodPreferences}
+                                        - Health Conditions: {healthData.HealthConditions}
+                                        - Allergies: {healthData.Allergies}
+                                        - Activity Level: {healthData.ActivityLevel}
+                                        - Occupation: {healthData.Occupation}
+                                        - Sleep Patterns: {healthData.SleepPatterns}
+                                        - Injury History: {healthData.InjuryHistory}
 
-                                Please provide a clear and structured response in the following format:
+                                        Please provide the response in a well-formatted and structured manner with sections, clear headings, and bullet points for readability. Each section (workout and meal plan) should be separate and concise.
+                                        Don't write <br>, </br>, <b>. </b> in the text.
 
-                                **Workout Plan**:
-                                1. Warm-up: Specify exercises and time
-                                2. Main Workout: List exercises with sets and repetitions
-                                3. Cool-down: Specify exercises and time
+                                        Combine the food preference meals with verified ones. feel free to use other popular meals that related to the food preference
+                                        YOUR CODE SHOULD BE LIKE THIS(
+        ========================================
+                      WORKOUT PLAN
+        ========================================
 
-                                **Meal Plan**:
-                                1. Breakfast: Example meal
-                                2. Lunch: Example meal
-                                3. Dinner: Example meal
-                                4. Snacks: Suggested snacks between meals
-                                5. Dietary Recommendations: Specific advice based on the user's dietary preferences and health conditions."
-                            }
+        1. Warm-up:
+           - 5 minutes of light cardio and dynamic stretching.
+
+        2. Main Workout:
+           - Neck Stretches (3 sets of 10 reps each):
+             * Chin tucks
+             * Neck rotations
+             * Side neck stretches
+           - Shoulder Exercises (3 sets of 12 reps each):
+             * Lateral raises
+             * Front raises
+             * Shoulder shrugs
+           - Cardio (20 minutes):
+             * Jogging
+             * Cycling
+             * Swimming
+
+        3. Cool-down:
+           - 5 minutes of static stretching.
+
+        ========================================
+                      MEAL PLAN
+        ========================================
+
+        1. Breakfast:
+           * (The meal in less than 10 words).
+
+        2. Lunch:
+           * (The meal in less than 10 words).
+
+        3. Dinner:
+           * (The meal in less than 10 words).
+
+        4. Snacks:
+           * (The meal in less than 10 words).
+
+        5. Dietary Recommendations:
+           * (Recomendation in less than 20 words).
+           * (Recomendation in less than 20 words).
+           * (Recomendation in less than 20 words).
+
+        ----------------------------------------
+        NOTE: 
+        This plan is a general guideline and can be tailored based on individual preferences and progress. 
+        Consult a qualified fitness professional for personalized guidance and to address any concerns regarding neck size.
+        ----------------------------------------
+        )
+                                        **Workout Plan**:
+                                        1. Warm-up: Specify exercises and time (e.g., 10 minutes of dynamic stretching) NOT MORE THAN 10 WORDS
+                                        2. Main Workout: Exercises with sets, reps, and proper structure (e.g., 3 sets of 10 push-ups) NOT MORE THAN 10 WORDS
+                                        3. Cool-down: Specify exercises and time (e.g., 5 minutes of static stretching) NOT MORE THAN 10 WORDS
+
+                                        **Meal Plan**: (Use native names only for native foods)
+                                        1. Breakfast: Example meal (e.g., scrambled eggs with avocado toast) - NOT MORE THAN 10 WORDS
+                                        2. Lunch: Example meal (e.g., grilled chicken with vegetables) - NOT MORE THAN 10 WORDS
+                                        3. Dinner: Example meal (e.g., salmon with quinoa and salad) - NOT MORE THAN 10 WORDS
+                                        4. Snacks: Example snacks between meals (e.g., fruit, nuts) - NOT MORE THAN 10 WORDS
+                                        5. Dietary Recommendations: Specific advice based on the user's dietary preferences and health conditions. - NOT MORE THAN 20 WORDS"
+                                    }
                         }
                     }
                 }
@@ -103,7 +158,7 @@ namespace FitnessApp.Controllers
                 // Send the request and get the response
                 var response = await client.ExecuteAsync(request);
 
-                string generatedWorkout = "";
+                string textContent = "";
 
                 if (!string.IsNullOrEmpty(response.Content))
                 {
@@ -111,32 +166,151 @@ namespace FitnessApp.Controllers
                     var jsonResponse = JObject.Parse(response.Content);
 
                     // Extract the text content from the response
-                    var textContent = jsonResponse["candidates"]?[0]?["content"]?["parts"]?[0]?["text"]?.ToString();
+                    textContent = jsonResponse["candidates"]?[0]?["content"]?["parts"]?[0]?["text"]?.ToString();
 
                     if (!string.IsNullOrEmpty(textContent))
                     {
-                        // Assign the generated workout to the view
-                        generatedWorkout = textContent;
+                        // Format the response before extracting sections
+                        string formattedContent = FormatResponse(textContent);
+
+                        // Extract sections
+                        string workoutPlan, mealPlan, notes;
+                        ExtractSections(formattedContent, out workoutPlan, out mealPlan, out notes);
+
+                        // Pass the extracted sections to the view
+                        ViewBag.WorkoutPlan = workoutPlan;
+                        ViewBag.MealPlan = mealPlan;
+                        ViewBag.Notes = notes;
                     }
                     else
                     {
-                        generatedWorkout = "No workout plan found in the response.";
+                        ViewBag.ErrorMessage = "No workout plan found in the response.";
                     }
                 }
                 else
                 {
-                    generatedWorkout = $"Error: {response.StatusCode} - {response.Content}";
+                    ViewBag.ErrorMessage = $"Error: {response.StatusCode} - {response.Content}";
                 }
 
-                // Pass the generated workout to the view
-                ViewBag.GeneratedWorkout = generatedWorkout;
                 return View("Result");
             }
             catch (Exception ex)
             {
                 // Handle any exceptions and show error message
-                ViewBag.GeneratedWorkout = $"Exception: {ex.Message}";
+                ViewBag.ErrorMessage = $"Exception: {ex.Message}";
                 return View("Result");
+            }
+        }
+
+        // Helper method to format the response
+        private string FormatResponse(string textContent)
+        {
+            // Apply simple text-based formatting for sections marked by ** (e.g., **Workout Plan**)
+            textContent = Regex.Replace(textContent, @"\*\*(.+?)\*\*", "$1:");
+
+            // Replace the equals signs (===) sections with proper section dividers
+            textContent = Regex.Replace(textContent, @"={20,}", "\r\n========================================\r\n");
+
+            // Trim leading and trailing spaces and ensure only one newline between sections for readability
+            textContent = Regex.Replace(textContent, @"\n{2,}", "\r\n");
+
+            // Optionally, format lists for better visual presentation (replace * with dash for bullet points)
+            textContent = textContent.Replace("* ", "- ");
+
+            // Ensure newlines between numbered sections (1., 2., 3., etc.) for better readability without excessive spacing
+            textContent = Regex.Replace(textContent, @"\n{2,}(\d\.)", "\r\n$1");
+
+            // Remove any trailing newlines for a cleaner output
+            textContent = textContent.TrimEnd();
+
+            return textContent;
+        }
+
+
+        private void ExtractSections(string textContent, out string workoutPlan, out string mealPlan, out string notes)
+        {
+            // Initialize the variables
+            workoutPlan = "";
+            mealPlan = "";
+            notes = "";
+
+            // Define patterns to extract the sections using Regex
+            string workoutPattern = @"Workout Plan([\s\S]+?)(?=Meal Plan)";
+            string mealPattern = @"Meal Plan([\s\S]+?)(?=NOTE)";
+            string notePattern = @"NOTE:([\s\S]+)";
+
+            // Extract the Workout Plan
+            var workoutMatch = Regex.Match(textContent, workoutPattern, RegexOptions.IgnoreCase);
+            if (workoutMatch.Success)
+            {
+                workoutPlan = workoutMatch.Value.Trim();
+            }
+
+            // Extract the Meal Plan
+            var mealMatch = Regex.Match(textContent, mealPattern, RegexOptions.IgnoreCase);
+            if (mealMatch.Success)
+            {
+                mealPlan = mealMatch.Value.Trim();
+            }
+
+            // Extract the Note section
+            var noteMatch = Regex.Match(textContent, notePattern, RegexOptions.IgnoreCase);
+            if (noteMatch.Success)
+            {
+                notes = noteMatch.Value.Trim();
+            }
+        }
+
+        // Method to extract text between Meal Plan numbers
+        private void ExtractMealSteps(string mealPlan, out string step1, out string step2, out string step3, out string step4, out string afterStep5)
+        {
+            // Initialize the variables
+            step1 = "";
+            step2 = "";
+            step3 = "";
+            step4 = "";
+            afterStep5 = "";
+
+            // Define the regular expression patterns for the steps
+            string step1Pattern = @"1\.\s*([\s\S]+?)(?=2\.)";
+            string step2Pattern = @"2\.\s*([\s\S]+?)(?=3\.)";
+            string step3Pattern = @"3\.\s*([\s\S]+?)(?=4\.)";
+            string step4Pattern = @"4\.\s*([\s\S]+?)(?=5\.)";
+            string afterStep5Pattern = @"5\.\s*([\s\S]+)";
+
+            // Match the text between "1." and "2."
+            var step1Match = Regex.Match(mealPlan, step1Pattern);
+            if (step1Match.Success)
+            {
+                step1 = step1Match.Groups[1].Value.Trim();
+            }
+
+            // Match the text between "2." and "3."
+            var step2Match = Regex.Match(mealPlan, step2Pattern);
+            if (step2Match.Success)
+            {
+                step2 = step2Match.Groups[1].Value.Trim();
+            }
+
+            // Match the text between "3." and "4."
+            var step3Match = Regex.Match(mealPlan, step3Pattern);
+            if (step3Match.Success)
+            {
+                step3 = step3Match.Groups[1].Value.Trim();
+            }
+
+            // Match the text between "4." and "5."
+            var step4Match = Regex.Match(mealPlan, step4Pattern);
+            if (step4Match.Success)
+            {
+                step4 = step4Match.Groups[1].Value.Trim();
+            }
+
+            // Capture any text after the last step ("5.")
+            var afterStep5Match = Regex.Match(mealPlan, afterStep5Pattern);
+            if (afterStep5Match.Success)
+            {
+                afterStep5 = afterStep5Match.Groups[1].Value.Trim();
             }
         }
     }
