@@ -13,5 +13,6 @@ namespace HFFitnessApp.Models
 
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<HealthData> HealthData { get; set; }
+        public DbSet<SavedPlan> SavedPlans { get; set; }
     }
 }

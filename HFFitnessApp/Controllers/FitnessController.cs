@@ -4,6 +4,7 @@ using RestSharp;
 using Newtonsoft.Json.Linq;
 using HFFitnessApp.Models;
 using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitnessApp.Controllers
 {
@@ -20,6 +21,77 @@ namespace FitnessApp.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public async Task<IActionResult> SavePlan(string workoutPlan, string mealPlan, string notes)
+        {
+            // Get the logged-in user's ID
+            var userId = User?.Identity?.IsAuthenticated == true
+                ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                : null;
+
+            if (userId == null)
+            {
+                return RedirectToAction("SignIn", "User");
+            }
+
+            // Save the workout and meal plan to the database
+            var savedPlan = new SavedPlan
+            {
+                UserId = userId,
+                WorkoutPlan = workoutPlan,
+                MealPlan = mealPlan,
+                Notes = notes
+            };
+
+            _context.SavedPlans.Add(savedPlan);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ViewSavedPlans");
+        }
+
+        [HttpPost]
+        public IActionResult DeleteSavedPlan(int id)
+        {
+            // Find the saved plan by ID
+            var savedPlan = _context.SavedPlans.FirstOrDefault(p => p.Id == id);
+
+            if (savedPlan != null)
+            {
+                // Remove the plan from the database
+                _context.SavedPlans.Remove(savedPlan);
+                _context.SaveChanges(); // Save changes to the database
+
+                TempData["Message"] = "Plan deleted successfully!";
+            }
+            else
+            {
+                TempData["Error"] = "Plan not found!";
+            }
+
+            // Redirect back to the ViewSavedPlans page
+            return RedirectToAction("ViewSavedPlans");
+        }
+
+
+        public async Task<IActionResult> ViewSavedPlans()
+        {
+            // Get the logged-in user's ID
+            var userId = User?.Identity?.IsAuthenticated == true
+                ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                : null;
+
+            if (userId == null)
+            {
+                return RedirectToAction("SignIn", "User");
+            }
+
+            // Retrieve saved plans for the logged-in user
+            var savedPlans = await _context.SavedPlans
+                .Where(sp => sp.UserId == userId)
+                .ToListAsync();
+
+            return View(savedPlans);
         }
 
         // Action method to handle user input and call Gemini API
@@ -86,7 +158,7 @@ namespace FitnessApp.Controllers
                                         YOUR CODE SHOULD BE LIKE THIS(
         ========================================
                       WORKOUT PLAN
-        ========================================
+        ===============================================
 
         1. Warm-up:
            - 5 minutes of light cardio and dynamic stretching.
@@ -110,7 +182,7 @@ namespace FitnessApp.Controllers
 
         ========================================
                       MEAL PLAN
-        ========================================
+        ===============================================
 
         1. Breakfast:
            * (The meal in less than 10 words).

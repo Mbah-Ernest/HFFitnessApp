@@ -11,19 +11,30 @@
 
     <div class="plan-section">
         <h4>Workout Plan</h4>
-        <pre>@workoutPlan</pre>
+        <div>@workoutPlan</div>
     </div>
 
     <div class="plan-section">
         <h4>Meal Plan</h4>
-        <pre>@mealPlan</pre>
+        <div>@mealPlan</div>
     </div>
 
     <div class="plan-section">
         <h4>Notes</h4>
-        <pre>@notes</pre>
+        <div>@notes</div>
     </div>
 
+    <div class="options">
+        <form method="post" action="@Url.Action("SavePlan", "Fitness")">
+            <input type="hidden" name="workoutPlan" value="@workoutPlan" />
+            <input type="hidden" name="mealPlan" value="@mealPlan" />
+            <input type="hidden" name="notes" value="@notes" />
+            <button type="submit" class="btn btn-success">Save Plan</button>
+        </form>
+        <form method="get" action="@Url.Action("ViewSavedPlans", "Fitness")">
+            <button type="submit" class="btn btn-secondary">View Saved Plans</button>
+        </form>
+    </div>
     <div class="options">
         <form method="post" action="@Url.Action("GenerateWorkout", "Fitness")">
             <button type="submit" class="btn btn-primary">Generate New Plan</button>
@@ -37,6 +48,7 @@
         </div>
     }
 </div>
+
 
 <style>
     .plan-container {
