@@ -105,7 +105,7 @@ namespace FitnessApp.Controllers
             if (userId == null)
             {
                 return RedirectToAction("SignIn", "User");
-            }
+            } 
 
             // Fetch the user's health data from the database
             var healthData = _context.HealthData.FirstOrDefault(h => h.UserId == userId);
