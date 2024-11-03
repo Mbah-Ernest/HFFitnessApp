@@ -14,7 +14,7 @@
     <div class="card shadow-lg p-4 rounded-lg">
         <h2 class="text-center mb-4 text-primary">Generate Your Workout Plan</h2>
 
-        <form method="post" asp-controller="Fitness" asp-action="GenerateWorkout">
+        <form method="post" asp-controller="Fitness" asp-action="GenerateWorkout" autocomplete="off">
             <div class="form-group">
                 <label for="fitnessGoal" class="font-weight-bold">Enter your fitness goal:</label>
                 <input type="text" id="fitnessGoal" name="fitnessGoal" class="form-control" placeholder="e.g., Build muscle, lose weight" required />
@@ -24,6 +24,7 @@
                 <button type="submit" class="btn btn-primary btn-lg">Generate Workout</button>
             </div>
         </form>
+
     </div>
 </div>
 

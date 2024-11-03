@@ -98,6 +98,7 @@ namespace FitnessApp.Controllers
         [HttpPost]
         public async Task<IActionResult> GenerateWorkout(string fitnessGoal)
         {
+           
             // Get the logged-in user's ID
             var userId = User?.Identity?.IsAuthenticated == true ? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value : null;
 
@@ -141,6 +142,7 @@ namespace FitnessApp.Controllers
                                         - Height: {healthData.Height} cm
                                         - Weight: {healthData.Weight} kg
                                         - Gender: {healthData.Gender}
+                                        - Main Fitness Goal: {healthData.FitnessGoal}
                                         - Fitness Goal: {fitnessGoal}
                                         - Dietary Preferences: {healthData.DietaryPreferences}
                                         - Food Preferences: {healthData.FoodPreferences}
@@ -155,7 +157,7 @@ namespace FitnessApp.Controllers
                                         Don't write <br>, </br>, <b>. </b> in the text.
 
                                         Combine the food preference meals with verified ones. feel free to use other popular meals that related to the food preference
-                                        YOUR CODE SHOULD BE LIKE THIS(
+                                        YOUR Response should be in this format, Workout plan, meal plan and Note. don't use the details bolow. the code is an example for a neck size fitness goal. The words in the notes is liable to change, it sould be like an advice area(
         ========================================
                       WORKOUT PLAN
         ===============================================
@@ -203,8 +205,7 @@ namespace FitnessApp.Controllers
 
         ----------------------------------------
         NOTE: 
-        This plan is a general guideline and can be tailored based on individual preferences and progress. 
-        Consult a qualified fitness professional for personalized guidance and to address any concerns regarding neck size.
+        (A quick short note note less than 20 words, not more than 40 words)
         ----------------------------------------
         )
                                         **Workout Plan**:
